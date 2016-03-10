@@ -16,3 +16,13 @@
 <framework> <10:11:36 AM> 1
 <framework> <10:12:06 AM> 2
 <framework> <10:12:14 AM> 1
+<framework> <10:24:41 AM> < Key: k > < Type: string >
+<framework> <10:24:42 AM> < Key: module > < Type: string >
+<framework> <10:24:42 AM> < Key: console > < Type: string >
+<framework> <10:24:42 AM> < Key: global > < Type: string >
+<framework> <10:24:42 AM> < Key: require > < Type: string >
+<framework> <10:25:01 AM> <Key: k> <Type: string>
+<framework> <10:25:01 AM> <Key: module> <Type: string>
+<framework> <10:25:01 AM> <Key: console> <Type: string>
+<framework> <10:25:01 AM> <Key: global> <Type: string>
+<framework> <10:25:01 AM> <Key: require> <Type: string>
