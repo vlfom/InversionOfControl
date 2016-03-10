@@ -34,9 +34,21 @@ sandbox.require = function(module) {
 // Читаем исходный код приложения из файла
 process.argv.slice(2).forEach((fileName) => {
 	fs.readFile(fileName, function(err, src) {
+	  var oldContextKeys = {};
+	  for (var key in sandbox.global)
+	  	oldContextKeys[key] = sandbox.global[key];
+  	  console.log(oldContextKeys);
 	  
 	  var script = vm.createScript(src, fileName);
 	  script.runInNewContext(sandbox);
+
+	  for (var key in sandbox.global)
+	  	if (!(key in oldContextKeys))
+	  		console.log('<Added global key> ' + key);
+
+	  for (var key in oldContextKeys)
+	  	if (!(key in sandbox.global))
+	  		console.log('<Deleted global key> ' + key);
 
 	  for (var k in sandbox.module.exports)
 	  	console.log(k + ': ' + typeof sandbox.module.exports[k]);

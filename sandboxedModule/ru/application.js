@@ -11,3 +11,5 @@ module.exports = {
 		return 42;
 	}
 };
+
+global.newKey = 42;
