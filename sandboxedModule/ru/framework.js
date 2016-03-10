@@ -5,7 +5,8 @@
 
 // Фреймворк может явно зависеть от библиотек через dependency lookup
 var fs = require('fs'),
-	vm = require('vm');
+	vm = require('vm'),
+	path = require('path');
 
 // Создаем контекст-песочницу, которая станет глобальным контекстом приложения
 var context = { 
@@ -13,10 +14,13 @@ var context = {
 	console: narrow_clone(console)
 };
 context.console.log = function(s) {
-	var path = require('path');
 	var programName = path.basename(process.argv[1]);
     var date = new Date().toLocaleTimeString();
+
     console.log('<' + programName + '> <' + date + '> ' + s);
+
+	var fileStream = fs.createWriteStream('log.txt', {flags: 'a'});
+	fileStream.write('<' + programName + '> <' + date + '> ' + s + '\n');
   };
 context.global = context;
 var sandbox = vm.createContext(context);
