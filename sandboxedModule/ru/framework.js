@@ -23,7 +23,13 @@ context.console.log = function(s) {
 	fileStream.write('<' + programName + '> <' + date + '> ' + s + '\n');
   };
 context.global = context;
+
 var sandbox = vm.createContext(context);
+sandbox.require = function(module) {
+    var date = new Date().toLocaleTimeString();
+    context.console.log('<' + date + '> ' + module + ' is required.');
+    return require(module);
+}
 
 // Читаем исходный код приложения из файла
 process.argv.slice(2).forEach((fileName) => {
