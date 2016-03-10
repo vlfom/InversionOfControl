@@ -34,19 +34,25 @@ sandbox.require = function(module) {
 // Читаем исходный код приложения из файла
 process.argv.slice(2).forEach((fileName) => {
 	fs.readFile(fileName, function(err, src) {
-	  // Тут нужно обработать ошибки
 	  
-	  // Запускаем код приложения в песочнице
 	  var script = vm.createScript(src, fileName);
 	  script.runInNewContext(sandbox);
 
 	  for (var k in sandbox.module.exports)
 	  	console.log(k + ': ' + typeof sandbox.module.exports[k]);
 	  
-	  // Забираем ссылку из sandbox.module.exports, можем ее исполнить,
-	  // сохранить в кеш, вывести на экран исходный код приложения и т.д.
+	  if (fileName == 'application.js') {
+	  	console.log('Source code of "testFunction":');
+	  	console.log(sandbox.module.exports.testFunction.toString());
+		console.log('Arguments number: ' + 
+			((sandbox.module.exports.testFunction.toString()
+				.match(/^.*?\((.*?)\)/)[1]
+				.match(/,/g) || []
+			).length + 1)
+		);
+	  }
 	})
-})
+});
 
 function narrow_clone(o) {
   var r = {};

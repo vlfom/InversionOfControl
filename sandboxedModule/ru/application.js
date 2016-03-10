@@ -3,6 +3,7 @@
 // кусочком фреймворка. Читайте README.md в нем задания.
 
 module.exports = {
-	'Var1': 1,
-	'Var2': 'Val2'
+	testFunction: function(a, b, c, d) {
+		return 42;
+	}
 };
