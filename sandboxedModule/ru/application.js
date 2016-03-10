@@ -2,8 +2,7 @@
 // прикладного приложения, загружаемого в песочницу демонстрационным
 // кусочком фреймворка. Читайте README.md в нем задания.
 
-module.exports = {};
-
-(function testRequire() {
-	require('util');
-})();
+module.exports = {
+	'Var1': 1,
+	'Var2': 'Val2'
+};

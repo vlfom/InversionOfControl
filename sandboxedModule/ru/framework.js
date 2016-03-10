@@ -39,6 +39,9 @@ process.argv.slice(2).forEach((fileName) => {
 	  // Запускаем код приложения в песочнице
 	  var script = vm.createScript(src, fileName);
 	  script.runInNewContext(sandbox);
+
+	  for (var k in sandbox.module.exports)
+	  	console.log(k + ': ' + typeof sandbox.module.exports[k]);
 	  
 	  // Забираем ссылку из sandbox.module.exports, можем ее исполнить,
 	  // сохранить в кеш, вывести на экран исходный код приложения и т.д.
