@@ -10,8 +10,14 @@ var fs = require('fs'),
 // Создаем контекст-песочницу, которая станет глобальным контекстом приложения
 var context = { 
 	module: {},
-	console: console
+	console: narrow_clone(console)
 };
+context.console.log = function(s) {
+	var path = require('path');
+	var programName = path.basename(process.argv[1]);
+    var date = new Date().toLocaleTimeString();
+    console.log('<' + programName + '> <' + date + '> ' + s);
+  };
 context.global = context;
 var sandbox = vm.createContext(context);
 
@@ -28,3 +34,10 @@ process.argv.slice(2).forEach((fileName) => {
 	  // сохранить в кеш, вывести на экран исходный код приложения и т.д.
 	})
 })
+
+function narrow_clone(o) {
+  var r = {};
+  for (var k in o)
+  	r[k] = o[k];
+  return r;
+}
