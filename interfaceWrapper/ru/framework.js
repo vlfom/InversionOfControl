@@ -11,17 +11,14 @@ function cloneInterface(infc) {
   return clone;
 }
 
-function wrapCallbackFunction(fn) {
+var readBytes = 0;
+
+function wrapCallbackFunction(fnName, fn) {
   return function wrapper() {
     var args = [];
     Array.prototype.push.apply(args, arguments);
-    console.log('Callback:');
-    for (var i = 0; i < args.length; ++i) {
-      if (args[i] == null || args[i].length == 'undefined' || args[i].length < 10)
-        console.dir(args[i]);
-      else
-        console.dir(typeof args[i]);
-    }
+    if (fnName.indexOf('read') > -1)
+      readBytes += args[1].length;
     fn.apply(undefined, args);
   }
 }
@@ -30,11 +27,9 @@ function wrapFunction(fnName, fn) {
   return function wrapper() {
     var args = [];
     Array.prototype.push.apply(args, arguments);
-    console.log('Call: ' + fnName);
-    console.dir(args);
     var l = args.length;
     if (typeof args[l - 1] == 'function') {
-      args[l - 1] = wrapCallbackFunction(args[l - 1]);
+      args[l - 1] = wrapCallbackFunction(fnName, args[l - 1]);
     }
     fn.apply(undefined, args);
   }
@@ -45,8 +40,13 @@ var context = {
   module: {},
   console: console,
   // Помещаем ссылку на fs API в песочницу
-  fs: cloneInterface(fs)
+  fs: cloneInterface(fs),
+  setInterval: setInterval
 };
+
+setInterval(function() {
+  console.log('[Bytes read] ' + readBytes);
+}, 2000);
 
 // Преобразовываем хеш в контекст
 context.global = context;
