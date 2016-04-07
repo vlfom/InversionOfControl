@@ -3,12 +3,20 @@
 var fs = require('fs'),
     vm = require('vm');
 
+function cloneInterface(anInterface) {
+  var clone = {};
+  for (var key in anInterface) {
+    clone[key] = anInterface[key];
+  }
+  return clone;
+}
+
 // Объявляем хеш из которого сделаем контекст-песочницу
 var context = {
   module: {},
   console: console,
   // Помещаем ссылку на fs API в песочницу
-  fs: fs
+  fs: cloneInterface(fs)
 };
 
 // Преобразовываем хеш в контекст
