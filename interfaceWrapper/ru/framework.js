@@ -3,12 +3,22 @@
 var fs = require('fs'),
     vm = require('vm');
 
-function cloneInterface(anInterface) {
+function cloneInterface(infc) {
   var clone = {};
-  for (var key in anInterface) {
-    clone[key] = anInterface[key];
+  for (var key in infc) {
+    clone[key] = wrapFunction(key, infc[key]);
   }
   return clone;
+}
+
+function wrapFunction(fnName, fn) {
+  return function wrapper() {
+    var args = [];
+    Array.prototype.push.apply(args, arguments);
+    console.log('Call: ' + fnName);
+    console.dir(args);
+    fn.apply(undefined, args);
+  }
 }
 
 // Объявляем хеш из которого сделаем контекст-песочницу
