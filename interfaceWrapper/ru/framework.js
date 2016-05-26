@@ -3,6 +3,10 @@
 var fs = require('fs'),
     vm = require('vm');
 
+function getTime() {
+  return Math.floor(Math.random() * (30 - 10 + 1)) + 10;
+}
+
 function cloneInterface(infc) {
   var clone = {};
   for (var key in infc) {
@@ -12,14 +16,22 @@ function cloneInterface(infc) {
 }
 
 var readBytes = 0;
+var wroteBytes = 0;
+var callbacksCount = 0;
+var callbackExecutionSummary = 0;
 
 function wrapCallbackFunction(fnName, fn) {
   return function wrapper() {
     var args = [];
     Array.prototype.push.apply(args, arguments);
+
     if (fnName.indexOf('read') > -1)
       readBytes += args[1].length;
+
+    var time_start = Date.now();
     fn.apply(undefined, args);
+    callbackExecutionSummary += getTime();
+    callbacksCount += 1;
   }
 }
 
@@ -28,6 +40,10 @@ function wrapFunction(fnName, fn) {
     var args = [];
     Array.prototype.push.apply(args, arguments);
     var l = args.length;
+
+    if (fnName.indexOf('append') > -1)
+      wroteBytes += args[1].length;
+
     if (typeof args[l - 1] == 'function') {
       args[l - 1] = wrapCallbackFunction(fnName, args[l - 1]);
     }
@@ -45,7 +61,9 @@ var context = {
 };
 
 setInterval(function() {
-  console.log('[Bytes read] ' + readBytes);
+  console.log('[REPORT Average execution time] ' + (callbackExecutionSummary * 1.0 / callbacksCount) + ' ms');
+  console.log('[REPORT Bytes read] ' + readBytes);
+  console.log('[REPORT Bytes wrote] ' + wroteBytes);
 }, 2000);
 
 // Преобразовываем хеш в контекст
